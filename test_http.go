@@ -15,8 +15,7 @@ func testHttp() {
 	client := &http.Client{}
 	url := fmt.Sprintf("%s/transactions?limit=%d", os.Getenv("MKT_LINK"), limit)
 	req, err := http.NewRequest("GET", url, nil)
-	token := base64.StdEncoding.EncodeToString([]byte("quadr988@gmail.com:" + pass))
-	fmt.Println(token)
+	token := base64.StdEncoding.EncodeToString([]byte(os.Getenv("USER_MAIL") + ":" + pass))
 
 	//req.Header.Add("Authorization", fmt.Sprintf("Basic %s", token))
 	req.Header.Add("Authorization", "Basic "+token)
