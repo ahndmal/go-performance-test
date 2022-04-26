@@ -1,45 +1,55 @@
 package main
 
 import (
-	"encoding/base64"
 	"fmt"
-	"io"
-	"io/ioutil"
-	"net/http"
+	_ "github.com/jackc/pgx"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
+	"log"
 	"os"
 	"time"
 )
 
-func main() {
-	start := time.Now()
-	fmt.Println(start)
-	testFiles()
-	fmt.Println(time.Now().Sub(start))
+type Cat struct {
+	Name  string
+	Age   int
+	Color string
 }
 
-func testHttp() {
-	limit := 30
-	pass := os.Getenv("ATLAS_TOKEN")
-	client := &http.Client{}
-	url := fmt.Sprintf("https://marketplace.atlassian.com/rest/2/vendors/1216206/reporting/sales/transactions?limit=%d", limit)
-	req, err := http.NewRequest("GET", url, nil)
-	token := base64.StdEncoding.EncodeToString([]byte("quadr988@gmail.com:" + pass))
-	fmt.Println(token)
+func main() {
+	start := time.Now()
 
-	//req.Header.Add("Authorization", fmt.Sprintf("Basic %s", token))
-	req.Header.Add("Authorization", "Basic "+token)
-
-	resp, err := client.Do(req)
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			fmt.Println(err)
-		}
-	}(resp.Body)
+	fmt.Println("START")
+	db, err := sqlx.Connect("postgres", fmt.Sprintf("postgres://jqnqjfrd:%s@%s/jqnqjfrd",
+		os.Getenv("ELEPH_PASS"),
+		os.Getenv("PSQL_HOST")))
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalln(err)
 	}
+	//tx := db.MustBegin()
 
-	bts, err := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(bts))
+	cats := make([]Cat, 0)
+	//var cat Cat
+
+	err = db.Ping()
+	if err != nil {
+		return
+	}
+	err = db.Select(&cats, "SELECT * FROM cats")
+	if err != nil {
+		return
+	}
+	//rows, err := db.Query("SELECT * FROM cats")
+	//for rows.Next() {
+	//	err := rows.Scan(&cat.Name, &cat.Age, &cat.Color)
+	//	if err != nil {
+	//		log.Panicln(err)
+	//	}
+	//	cats = append(cats, cat)
+	//}
+
+	defer db.Close()
+	fmt.Println(cats)
+
+	fmt.Println(time.Now().Sub(start))
 }
