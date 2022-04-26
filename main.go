@@ -3,53 +3,32 @@ package main
 import (
 	"fmt"
 	_ "github.com/jackc/pgx"
-	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"log"
-	"os"
+	"go-http-perf/synch"
+	"runtime"
+	"sync"
 	"time"
 )
 
-type Cat struct {
-	Name  string
-	Age   int
-	Color string
-}
-
 func main() {
+	defer runtime.UnlockOSThread()
 	start := time.Now()
+	fmt.Println(fmt.Sprintf("START %d", start.UnixMilli()))
+	fmt.Println("========")
 
-	fmt.Println("START")
-	db, err := sqlx.Connect("postgres", fmt.Sprintf("postgres://jqnqjfrd:%s@%s/jqnqjfrd",
-		os.Getenv("ELEPH_PASS"),
-		os.Getenv("PSQL_HOST")))
-	if err != nil {
-		log.Fatalln(err)
+	var wg sync.WaitGroup
+	runtime.GOMAXPROCS(10)
+	wg.Add(6)
+
+	for a := 0; a < 6; a++ {
+		go synch.AsyncHttp(3, &wg)
 	}
-	//tx := db.MustBegin()
 
-	cats := make([]Cat, 0)
-	//var cat Cat
+	go synch.AsyncHttp(4, &wg)
 
-	err = db.Ping()
-	if err != nil {
-		return
-	}
-	err = db.Select(&cats, "SELECT * FROM cats")
-	if err != nil {
-		return
-	}
-	//rows, err := db.Query("SELECT * FROM cats")
-	//for rows.Next() {
-	//	err := rows.Scan(&cat.Name, &cat.Age, &cat.Color)
-	//	if err != nil {
-	//		log.Panicln(err)
-	//	}
-	//	cats = append(cats, cat)
-	//}
+	wg.Wait()
 
-	defer db.Close()
-	fmt.Println(cats)
-
-	fmt.Println(time.Now().Sub(start))
+	// === end
+	fmt.Println(fmt.Sprintf("Script took %d nanos", time.Now().Sub(start).Nanoseconds()))
+	fmt.Println("========")
 }
