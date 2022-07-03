@@ -4,7 +4,7 @@ import (
 	"fmt"
 	_ "github.com/jackc/pgx"
 	_ "github.com/lib/pq"
-	"go-http-perf/dir"
+	"go-http-perf/dirs"
 	"golang.org/x/net/html"
 	"io/ioutil"
 	"net/http"
@@ -16,10 +16,10 @@ import (
 
 func main() {
 	start := time.Now()
-	fmt.Println(fmt.Sprintf("START %d", start.UnixMilli()))
+	fmt.Println(fmt.Sprintf("START %s", start.String()))
 	fmt.Println("========")
 
-	println(dir.CountWords(dir.GetWholeText()))
+	println(dirs.CountWords(dirs.GetWholeText()))
 	fileBytes, err := ioutil.ReadFile("/home.andrii/docs/file1.txt")
 	if err != nil {
 		println(err)
@@ -62,9 +62,9 @@ func ConcurHttp() {
 				fmt.Println(err)
 			}
 			//body, err := ioutil.ReadAll(response.Body)
-			if err != nil {
-				fmt.Println(err)
-			}
+			//if err != nil {
+			//	fmt.Println(err)
+			//}
 			//println(string(body))
 			doc, err := html.Parse(response.Body)
 			if err != nil {
