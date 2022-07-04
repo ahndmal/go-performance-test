@@ -11,22 +11,23 @@ import (
 )
 
 func TestGCP(t *testing.T) {
+	var wg sync.WaitGroup
 
 	urls := []string{
 		"https://us-central1-andmal-bot.cloudfunctions.net/gcp-java-perf-test", // java
 		"https://us-central1-andmal-bot.cloudfunctions.net/node2",              // node
-		"https://us-central1-andmal-bot.cloudfunctions.net/go-perf-test",       // node
+		"https://us-central1-andmal-bot.cloudfunctions.net/go-perf-test",       // Go
 		"https://us-central1-andmal-bot.cloudfunctions.net/python-perf-test",   // python
 		"https://us-central1-andmal-bot.cloudfunctions.net/dotnet2",            // dotnet
 	}
 
 	//OneUrlReq(urls[0], 20)
-	//OneUrlReq(urls[1], 20)
-	//OneUrlReq(urls[2], 100)
+	//wg.Add(1)
+	OneUrlReq(urls[1], 40)
+	OneUrlReq(urls[2], 40)
 	//OneUrlReq(urls[3], 100)
 	//OneUrlReq(urls[4], 20)
 
-	var wg sync.WaitGroup
 	for _, url := range urls {
 		wg.Add(1)
 		go func(url string) {
