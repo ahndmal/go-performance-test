@@ -1,8 +1,11 @@
 package test
 
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
 
-func TestChannels() {
+func TestChannels(t *testing.T) {
 
 	messages := make(chan string)
 
