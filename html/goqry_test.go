@@ -9,7 +9,6 @@ import (
 )
 
 func TestHtmlQry(t *testing.T) {
-	//
 	res, err := http.Get("https://uk.wikipedia.org/wiki/%D0%9B%D0%B8%D0%BF%D0%B8%D1%86%D1%8C%D0%BA%D0%B0_%D0%B1%D0%B8%D1%82%D0%B2%D0%B0")
 	if err != nil {
 		log.Println("Error when getting wiki page {}", err)
