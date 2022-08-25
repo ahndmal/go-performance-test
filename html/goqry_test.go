@@ -30,3 +30,19 @@ func TestHtmlQry(t *testing.T) {
 	//	println(sel.Text())
 	//})
 }
+
+func TestGetLinks(t *testing.T) {
+	res, err := http.Get("https://www.wikipedia.org/")
+	if err != nil {
+		log.Println("Error when getting wiki page {}", err)
+	}
+	defer res.Body.Close()
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		return
+	}
+	doc.Find("a").Each(func(i int, link *goquery.Selection) {
+		log.Println(link.Text())
+		log.Println(link.Attr("href"))
+	})
+}

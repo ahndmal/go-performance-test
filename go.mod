@@ -21,6 +21,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/richardlehane/msoleps v1.0.1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/unidoc/unioffice v1.20.0 // indirect
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
