@@ -2,8 +2,9 @@ package dirs
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strings"
+	"testing"
 )
 
 func CountWords(text string) int {
@@ -14,7 +15,7 @@ func CountWords(text string) int {
 	return count
 }
 
-func TestFiles() {
+func TestFiles(t *testing.T) {
 	//dirName := "/home/andrii/docs"
 	//dirs, err := os.ReadDir(dirName)
 	//if err != nil {
@@ -38,10 +39,16 @@ func TestFiles() {
 	//}
 }
 
+func TestGetWholeText(t *testing.T) {
+	wholeText := GetWholeText()
+	words := strings.Split(wholeText, " ")
+	println(len(words))
+}
+
 func GetWholeText() string {
 	var initStr string
 	for i := 1; i < 500; i++ {
-		file, err := ioutil.ReadFile(fmt.Sprintf("/home/andrii/docs/file%d.txt", i))
+		file, err := os.ReadFile(fmt.Sprintf("/home/andrii/Documents/lorem%d.txt", i))
 		initStr += string(file)
 		if err != nil {
 			fmt.Println(err)
