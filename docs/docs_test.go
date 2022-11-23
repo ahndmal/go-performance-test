@@ -69,7 +69,7 @@ func TestDocsCreation(t *testing.T) {
 
 	}
 	doc.AddParagraph()
-	err := doc.SaveToFile("../files/doc_tables.odt")
+	err := doc.SaveToFile("../resources/doc_tables.odt")
 	if err != nil {
 		log.Fatalln(err)
 	}

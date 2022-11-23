@@ -8,9 +8,8 @@ import (
 )
 
 func DBOne() {
-	db, err := sqlx.Connect("postgres", fmt.Sprintf("postgres://jqnqjfrd:%s@%s/jqnqjfrd",
-		os.Getenv("ELEPH_PASS"),
-		os.Getenv("PSQL_HOST")))
+	db, err := sqlx.Connect("postgres", fmt.Sprintf("postgres://dev:%s@172.17.0.2/pages",
+		os.Getenv("DB_PASS")))
 	if err != nil {
 		log.Fatalln(err)
 	}

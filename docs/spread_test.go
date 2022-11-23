@@ -21,7 +21,7 @@ func TestCreateExcel(t *testing.T) {
 	if err := exc.Validate(); err != nil {
 		log.Fatalf("error validating sheet: %s", err)
 	}
-	err := exc.SaveToFile("../files/excel1.ods")
+	err := exc.SaveToFile("../resources/excel1.ods")
 	if err != nil {
 		log.Fatalln(err)
 	}
