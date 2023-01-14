@@ -4,7 +4,7 @@ import (
 	"fmt"
 	_ "github.com/jackc/pgx"
 	_ "github.com/lib/pq"
-	"go-http-perf/dirs"
+	my_http "go-http-perf/http"
 	"golang.org/x/net/html"
 	"io/ioutil"
 	"net/http"
@@ -14,13 +14,34 @@ import (
 	"time"
 )
 
+func say(s string) {
+	for i := 0; i < 5; i++ {
+		time.Sleep(100 * time.Millisecond)
+		fmt.Println(s)
+	}
+}
+
 func main() {
 	start := time.Now()
 	fmt.Println(fmt.Sprintf("START %s", start.String()))
 	fmt.Println("========")
+	// ======
 
-	println(dirs.CountWords(dirs.GetWholeText()))
-	fileBytes, err := ioutil.ReadFile("/home.andrii/docs/file1.txt")
+	wg := sync.WaitGroup{}
+	url := "https://en.wikipedia.org/wiki/Shannon_Lucid"
+	wg.Add(1)
+	for i := 0; i < 50; i++ {
+		go my_http.PerformReq(url, 50, &wg)
+	}
+	wg.Done()
+
+	// === end
+	fmt.Println(fmt.Sprintf("Script took %f seconds", time.Now().Sub(start).Seconds()))
+	fmt.Println("========")
+}
+
+func countWords2() {
+	fileBytes, err := ioutil.ReadFile("/home/andrii/Documents/lorem1.txt")
 	if err != nil {
 		println(err)
 	}
@@ -30,10 +51,6 @@ func main() {
 		count += 1
 	}
 	fmt.Println(count)
-
-	// === end
-	fmt.Println(fmt.Sprintf("Script took %f seconds", time.Now().Sub(start).Seconds()))
-	fmt.Println("========")
 }
 
 func ConcurHttp() {
