@@ -25,7 +25,7 @@ func TestDocsCreation(t *testing.T) {
 		row := table.AddRow()
 		run := row.AddCell().AddParagraph().AddRun()
 		run.AddText("Name")
-		run.Properties().SetHighlight(wml.ST_HighlightColorYellow)
+		run.Properties().SetHighlight(wml.ST_HighlightColorBlack)
 		row.AddCell().AddParagraph().AddRun().AddText("John Smith")
 		row = table.AddRow()
 		row.AddCell().AddParagraph().AddRun().AddText("Street Address")
