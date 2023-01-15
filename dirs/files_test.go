@@ -2,12 +2,13 @@ package dirs
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"testing"
 )
 
-func CountWords(text string) int {
+func CountWordsByText(text string) int {
 	var count int
 	for i, _ := range strings.Split(text, " ") {
 		count += i
@@ -15,20 +16,36 @@ func CountWords(text string) int {
 	return count
 }
 
-func TestFiles(t *testing.T) {
-	//dirName := "/home/andrii/docs"
-	//dirs, err := os.ReadDir(dirName)
-	//if err != nil {
-	//	println(err)
-	//}
+func countWordsByPath(path string) {
+	fileBytes, err := os.ReadFile(path)
+	if err != nil {
+		println(err)
+	}
+	count := 0
+	for _, w := range strings.Split(string(fileBytes), " ") {
+		println(w)
+		count += 1
+	}
+	fmt.Println(count)
+}
 
-	//dirs, err := os.ReadDir(dirName)
-	//if err != nil {
-	//	log.Panicln(err)
-	//}
-	//for i, file := range dirs {
-	//	ioutil.ReadAll(file)
-	//}
+func TestFiles(t *testing.T) {
+	dirName := "/home/andrii/Documents"
+	//lorem1 := "/home/andrii/Documents/lorem1.txt"
+
+	dirs, err := os.ReadDir(dirName)
+	if err != nil {
+		log.Panicln(err)
+	}
+	for _, dir := range dirs {
+		if !dir.IsDir() {
+			readFile, err := os.ReadFile(dir.Name())
+			if err != nil {
+				return
+			}
+			fmt.Println(readFile)
+		}
+	}
 
 	//dirs, err := ioutil.ReadDir("/home/andrii/docs")
 	//if err != nil {

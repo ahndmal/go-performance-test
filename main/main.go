@@ -4,18 +4,9 @@ import (
 	"fmt"
 	_ "github.com/jackc/pgx"
 	_ "github.com/lib/pq"
-	my_http "go-http-perf/http"
-	"io/ioutil"
-	"strings"
+	"go-http-perf/docs"
 	"time"
 )
-
-func say(s string) {
-	for i := 0; i < 5; i++ {
-		time.Sleep(100 * time.Millisecond)
-		fmt.Println(s)
-	}
-}
 
 func main() {
 	start := time.Now()
@@ -33,23 +24,10 @@ func main() {
 	//	}()
 	//}
 
-	//docs.ReadDoc2()
-	my_http.ConcurHttp()
+	docs.ReadDoc()
+	//my_http.ConcurHttp()
 
 	// === end
 	fmt.Println(fmt.Sprintf("Script took %f seconds", time.Now().Sub(start).Seconds()))
 	fmt.Println("========")
-}
-
-func countWords2() {
-	fileBytes, err := ioutil.ReadFile("/home/andrii/Documents/lorem1.txt")
-	if err != nil {
-		println(err)
-	}
-	count := 0
-	for _, w := range strings.Split(string(fileBytes), " ") {
-		println(w)
-		count += 1
-	}
-	fmt.Println(count)
 }

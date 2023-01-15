@@ -42,12 +42,14 @@ func getTokenFromWeb(config *oauth2.Config) *oauth2.Token {
 
 func saveToken(path string, token *oauth2.Token) {
 	fmt.Printf("Saving credential file to: %s\n", path)
-	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+	tokenJson, err := json.Marshal(token)
 	if err != nil {
-		log.Fatalf("Unable to cache oauth token: %v", err)
+		log.Fatalf("Unable to open the files: %v", err)
 	}
-	defer f.Close()
-	json.NewEncoder(f).Encode(token)
+	err2 := os.WriteFile(path, tokenJson, os.ModeDevice)
+	if err2 != nil {
+		log.Fatalf("Unable to write token to file: %v", err2)
+	}
 }
 
 func tokenFromFile(file string) (*oauth2.Token, error) {
@@ -61,7 +63,7 @@ func tokenFromFile(file string) (*oauth2.Token, error) {
 	return tok, err
 }
 
-func ReadDoc2() {
+func ReadDoc() {
 	ctx := context.Background()
 	b, err := os.ReadFile(os.Getenv("OAUTH_TOKEN_PATH"))
 
@@ -81,11 +83,13 @@ func ReadDoc2() {
 	}
 
 	id := os.Getenv("SHEET_ID")
-	readRange := "Class Data!A2:C"
+	readRange := "A1:A5"
 	resp, err := srv.Spreadsheets.Values.Get(id, readRange).Do()
 	if err != nil {
 		log.Fatalf("Unable to retrieve data from sheet: %v", err)
 	}
+
+	fmt.Println(resp.Values)
 
 	if len(resp.Values) == 0 {
 		fmt.Println("No data found.")
