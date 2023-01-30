@@ -17,7 +17,7 @@ const url = "https://localhost:8000"
 
 var httpVersion = flag.Int("version", 2, "HTTP version")
 
-func main() {
+func H2Client() {
 	flag.Parse()
 	client := &http.Client{}
 
